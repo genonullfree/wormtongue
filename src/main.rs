@@ -49,7 +49,7 @@ fn print_char(uc: &u8) {
         }
     } else if *uc == 0x7f {
         print!("<DEL>");
-    } else if *uc > 0x7f && *uc <= 0xff {
+    } else if *uc > 0x7f {
         print!("<{:02x}>", uc);
     }
 
@@ -57,20 +57,23 @@ fn print_char(uc: &u8) {
 }
 
 fn main() {
+    let sock = UdpSocket::bind("0.0.0.0:1337").expect("Couldn't bind to address");
     loop {
 
-        let sock = UdpSocket::bind("0.0.0.0:1337").expect("Couldn't bind to address");
 
-        let mut buf = [0];
+        let mut buf: [u8;32] = [0;32];
         let size = sock.recv(&mut buf)
                               .expect("Didn't rx anything...");
 
-        if size != 1 {
-            println!("Error, received more than 1 byte!");
+        if size > 32 {
+            println!("Error, received more than buffer size!");
             continue;
         }
 
-        print_char(&buf[0]);
+        let buf = &mut buf[..size];
 
+        for i in buf.iter() {
+            print_char(&i);
+        }
     };
 }
