@@ -37,11 +37,23 @@ static ASCIICODES: [&str;32] = [
 ];
 
 fn print_char(uc: &u8) {
+    let c: char = *uc as char;
 
-        let c: char = *uc as char;
-
+    if *uc >= 0x20 && *uc < 0x7f {
         print!("{}", c);
-        io::stdout().flush();
+    } else if *uc < 0x20 {
+        if *uc == 0x01 {
+            println!();
+        } else {
+            print!("<{}>", ASCIICODES[*uc as usize]);
+        }
+    } else if *uc == 0x7f {
+        print!("<DEL>");
+    } else if *uc > 0x7f && *uc <= 0xff {
+        print!("<{:02x}>", uc);
+    }
+
+    io::stdout().flush();
 }
 
 fn main() {
