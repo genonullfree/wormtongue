@@ -1,39 +1,10 @@
-use std::net::UdpSocket;
 use std::io::{self, Write};
+use std::net::UdpSocket;
 
-static ASCIICODES: [&str;32] = [
-    "NUL",
-    "SOH",
-    "STX",
-    "ETX",
-    "EOT",
-    "ENQ",
-    "ACK",
-    "BEL",
-    "BS",
-    "HT",
-    "LF",
-    "VT",
-    "FF",
-    "CR",
-    "SO",
-    "SI",
-    "DLE",
-    "DC1",
-    "DC2",
-    "DC3",
-    "DC4",
-    "NAK",
-    "SYN",
-    "ETB",
-    "CAN",
-    "EM",
-    "SUB",
-    "ESC",
-    "FS",
-    "GS",
-    "RS",
-    "US"
+static ASCIICODES: [&str; 32] = [
+    "NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "BEL", "BS", "HT", "LF", "VT", "FF", "CR",
+    "SO", "SI", "DLE", "DC1", "DC2", "DC3", "DC4", "NAK", "SYN", "ETB", "CAN", "EM", "SUB", "ESC",
+    "FS", "GS", "RS", "US",
 ];
 
 fn print_char(uc: &u8) {
@@ -59,11 +30,8 @@ fn print_char(uc: &u8) {
 fn main() {
     let sock = UdpSocket::bind("0.0.0.0:1337").expect("Couldn't bind to address");
     loop {
-
-
-        let mut buf: [u8;32] = [0;32];
-        let size = sock.recv(&mut buf)
-                              .expect("Didn't rx anything...");
+        let mut buf: [u8; 32] = [0; 32];
+        let size = sock.recv(&mut buf).expect("Didn't rx anything...");
 
         if size > 32 {
             println!("Error, received more than buffer size!");
@@ -75,5 +43,5 @@ fn main() {
         for i in buf.iter() {
             print_char(&i);
         }
-    };
+    }
 }
