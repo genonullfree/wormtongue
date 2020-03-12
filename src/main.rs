@@ -53,7 +53,7 @@ fn print_char(uc: &u8) {
         print!("<{:02x}>", uc);
     }
 
-    io::stdout().flush();
+    io::stdout().flush().expect("Failed to flush");
 }
 
 fn main() {
